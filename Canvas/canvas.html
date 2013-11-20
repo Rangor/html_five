@@ -4,87 +4,170 @@
 </head>
 <body>
 <h1>This is my header, there are many like it, but this one is mine</h1>
-	<canvas id="myCanvas" width="1024" height="800"
-	style="border:1px solid #000000;">
-	</canvas>
+    <canvas id="myCanvas" width="1024" height="800"
+    style="border:1px solid #000000;">
+    </canvas>
 <script type="text/javascript">
+    var canvasSizeX = 1024;
+    var canvasSizeY = 800;
 
-	
-	window.requestAnimFrame = (function(callback) {
+    var canvas = document.getElementById("myCanvas");
+    var context = canvas.getContext("2d");
+
+    var listOfSquares =[];
+
+    window.requestAnimFrame = (function(callback) {
         return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
         function(callback) {
           window.setTimeout(callback, 1000 / 60);
         };
       })();
 
-    var square = function(){
-    	this.posX = 0;
-    	this.posY = 0;
-    	this.speedX = 1;
-    	this.speedY = 2;
-    	this.widht = 100;
-    	this.height = 100;
 
-    	this.draw = function(context){
-    		console.log("Drawing a square");
-    		context.fillRect(10,10,20,20);
-    	}
+    function randColor(){
+        var rand = Math.random() * 99 + 1;
+        var Red = rand-rand%1;
+        rand = Math.random() * 99 + 1;
+        var Blue = rand-rand%1;
+        rand = Math.random() * 99 + 1;
+        var Green = rand-rand%1;
+        //console.log((Red+""+Green+""+Blue));
+
+        var trueColor = Red*10000+Blue*100+Green+"";
+        return trueColor;
+        //return(Red+""+Green+""+Blue);
     }
 
+    var square = function(speed){
+        this.posX = Math.random() * 1000 + 1;
+        this.posY = Math.random() * 1000 + 1;
+        this.speedX = speed;
+        this.speedY = speed;
+        this.boxWidth = 100;      
+        this.boxHeight = 100;
+        this.boxColor = randColor();
+
+        this.draw = function(boxContext){
+            boxContext.fillStyle = this.boxColor;
+            boxContext.fillRect(this.posX,this.posY,this.boxWidth,this.boxHeight);
+        }
+
+        this.reverseX = function(){
+            if(this.speedX > 0){
+                this.speedX = -1;
+            }else{
+                this.speedX = 1;
+            }
+        }
+
+        this.reverseY = function(){
+            if(this.speedY > 0){
+                this.speedY = -1;
+            }else{
+                this.speedY = 1;
+            }
+        }
+
+        this.move = function(){
+            this.posX+=this.speedX;
+            this.posY+=this.speedY;
+            if(this.posX+this.boxWidth > canvasSizeX){
+                var rand = Math.random() * 10 + 1;
+                this.speedX = -rand;
+            }
+            if(this.posY+this.boxHeight > canvasSizeY){
+                var rand = Math.random() * 10 + 1;
+                this.speedY = -rand;
+            }
+
+            if(this.posX < 0){
+                var rand = Math.random() * 10 + 1;
+                this.speedX = rand;
+                this.boxColor = randColor();
+            }
+            if(this.posY < 0){
+                var rand = Math.random() * 10 + 1;
+                this.speedY = rand;
+                this.boxColor = randColor();
+            }
+        }
+    }
+
+    for(var i = 0; i < 2; i++){
+        var rand = Math.random();
+        var r = rand * 10 + 1;
+        listOfSquares.push(new square(r));
+    }
+
+    function boxColisisonCheck(box1, box2){
+        var b1X1 = box1.posX;
+        var b1X2 = box1.posX + box1.boxWidth;
+        var b1Y1 = box1.posY;
+        var b1Y2 = box1.posY + box1.boxHeight;
+
+        var b2X1 = box2.posX;
+        var b2X2 = box2.posX + box2.boxWidth;
+        var b2Y1 = box2.posY;
+        var b2Y2 = box2.posY + box2.boxHeight;
+
+        //console.log("B1X1:" + Math.floor(b1X1) + " B1X2:" + Math.floor(b1X2) + " B2X1:" + Math.floor(b2X1)+ " B2X2: " + Math.floor(b2X2));
+
+        var xHit = false;
+        if(b2X1 > b1X1 && b2X1 < b1X2){
+            //console.log("B1X1:" + b1X1 + " B1X2:" + b1X2 + " B2X1:" + b2X1+ " B2X2: " + b2X2);
+            
+            xHit = true;
+        }
+
+        var yHit = false;
+        if(b2Y1 > b1Y1 && b2Y1 < b1Y2){
+            yHit = true;
+        }
+
+        if(xHit && yHit){
+            console.log("Y and X hit!")
+
+            box2.posX-=box2.speedX;
+            box2.posY-=box2.speedY;
+
+            box2.reverseX();
+            box2.reverseY();
+
+            box1.posX-=box1.speedX;
+            box1.posY-=box1.speedY;
+
+            box1.reverseY();
+            box1.reverseX();
 
 
-    var i = 0;
-    color = "0000FF"
-    var speed = 5;
+        }
 
-    squarePosX = 100;
-    squarePosY = 100;
-    var movementX = 4;
-    var movementY = 4;
+        return false;
+    }
 
-    var canvasSizeX = 1024;
-    var canvasSizeY = 800;
+    function animate(){
 
-    var squareWidth = 100;
-    var squareHeight = 100;
+        //Clear
+        context.clearRect(0, 0, canvas.width, canvas.height);
 
-	function animate(){
-		var canvas = document.getElementById("myCanvas");
-		var context = canvas.getContext("2d");
+        //Draw
+        for(var i = 0; i < listOfSquares.length; i++){
+            listOfSquares[i].draw(context);
+            listOfSquares[i].move();
+            for(var p = 0; p < listOfSquares.length;p++){
+                if(p != i){
+                   boxColisisonCheck(listOfSquares[i],listOfSquares[p]);     
+                }
+            }
+        }
 
-		//Clear
-		context.clearRect(0, 0, canvas.width, canvas.height);
-
-		//Draw
-		mySquare = new square();
-    	console.log(mySquare.posX);
-    	mySquare.draw(context);
-
-		context.fillStyle = color;
-		context.fillRect(squarePosX+=movementX,squarePosY+=movementY,squareWidth,squareHeight);
-		i+=speed;
-
-		if(squarePosX+squareWidth > canvasSizeX){
-			movementX = -4;
-		}
-		if(squarePosY+squareHeight > canvasSizeY){
-			movementY = -3;
-		}
-
-		if(squarePosX < 0){
-			movementX = 2;
-		}
-		if(squarePosY < 0){
-			movementY = 2;
-		}
-
-		// request new frame
+        // request new frame
         requestAnimFrame(function() {
           animate();
         });
-	}
+    }
 
-	animate();
+    animate();
 
 </script>
 </body>
