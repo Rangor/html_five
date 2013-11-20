@@ -1,0 +1,121 @@
+<script>
+
+	//Prototype
+
+	function Animal(name){
+		this.name = name;
+	}
+
+	var myAnimal = new Animal('Martin');
+	console.log(myAnimal.name);
+
+	Animal.prototype.walk = function(){
+		console.log(this.name + ' is walking');
+	}
+
+	myAnimal.walk();//Martin is walking
+
+	var newAnimal = Object.create(myAnimal); //Works, but gets same name
+	newAnimal.walk();//Martin still walking
+	newAnimal.name = "Petter";
+	newAnimal.walk();//Now Petter is walking
+
+	var Monkey = function(){
+	}
+	var anotherAnimal = new Monkey();
+	Monkey.prototype = new Animal('Monkey name');
+	var newMonkey = new Monkey();
+
+	console.log(anotherAnimal);
+	console.log(newMonkey);
+
+
+	function Cat(){
+		this.mjau = function(){
+			console.log("Cat goes mjau");
+		}
+	}
+
+	var myCat = new Cat();
+
+	myCat.mjau();//Mjau
+
+	//Extends Cat with bark method
+	Cat.prototype.bark = function(){
+		console.log("Cat goes bark");
+	}
+
+	myCat.bark();//Bark
+
+	//This does nothing to override the mjau function of Cat
+	Cat.prototype.mjau = function(){
+		console.log("Silence");
+	}
+
+
+
+	myCat.mjau();//Still goes mjau
+
+	var Dog = function (){
+		this.bark = function(){
+			console.log("Dog goes bark");
+		}
+	}
+
+	var myDog = new Dog();
+	myDog.bark();
+	console.log(myDog);
+
+	//This is strange
+	console.log(Dog.prototype);
+	Dog.prototype = new Cat();
+	console.log(Dog.prototype);
+
+	var newDog = new Dog();
+	newDog.bark();
+	newDog.mjau();
+	console.log(newDog);
+
+
+	var Car = {
+		type : "Type",
+		engine : "Engine",
+		tires : "Tires",
+		wheels : 4
+	}
+
+	//debugger
+	console.log("-*****-");
+	console.log(newDog);
+	for(var method in newDog){
+		console.log("Found a item");
+		console.log(method);
+	}
+
+	Car.tires = Car;
+	console.log("------------------")
+	console.log(Car);
+	console.log(Car.tires.tires.tires.tires.tires.wheels);//This very useful
+
+	var ford = Object.create(Car);
+	console.log(ford);
+	console.log(ford.wheels);
+	ford.type = Car;
+	console.log(ford);
+	console.log(ford.type.wheels);
+
+
+	var chevy = Object.create(Car);
+	
+	
+	chevy.wheels = 12;
+
+	console.log(ford.wheels);
+	console.log(chevy.wheels);
+	Car.wheels = 5;
+	console.log(ford.wheels);
+	console.log(chevy.wheels);
+
+
+
+</script>

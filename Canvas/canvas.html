@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+</head>
+<body>
+<h1>This is my header, there are many like it, but this one is mine</h1>
+	<canvas id="myCanvas" width="1024" height="800"
+	style="border:1px solid #000000;">
+	</canvas>
+<script type="text/javascript">
+
+	
+	window.requestAnimFrame = (function(callback) {
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+        function(callback) {
+          window.setTimeout(callback, 1000 / 60);
+        };
+      })();
+
+    var square = function(){
+    	this.posX = 0;
+    	this.posY = 0;
+    	this.speedX = 1;
+    	this.speedY = 2;
+    	this.widht = 100;
+    	this.height = 100;
+
+    	this.draw = function(context){
+    		console.log("Drawing a square");
+    		context.fillRect(10,10,20,20);
+    	}
+    }
+
+
+
+    var i = 0;
+    color = "0000FF"
+    var speed = 5;
+
+    squarePosX = 100;
+    squarePosY = 100;
+    var movementX = 4;
+    var movementY = 4;
+
+    var canvasSizeX = 1024;
+    var canvasSizeY = 800;
+
+    var squareWidth = 100;
+    var squareHeight = 100;
+
+	function animate(){
+		var canvas = document.getElementById("myCanvas");
+		var context = canvas.getContext("2d");
+
+		//Clear
+		context.clearRect(0, 0, canvas.width, canvas.height);
+
+		//Draw
+		mySquare = new square();
+    	console.log(mySquare.posX);
+    	mySquare.draw(context);
+
+		context.fillStyle = color;
+		context.fillRect(squarePosX+=movementX,squarePosY+=movementY,squareWidth,squareHeight);
+		i+=speed;
+
+		if(squarePosX+squareWidth > canvasSizeX){
+			movementX = -4;
+		}
+		if(squarePosY+squareHeight > canvasSizeY){
+			movementY = -3;
+		}
+
+		if(squarePosX < 0){
+			movementX = 2;
+		}
+		if(squarePosY < 0){
+			movementY = 2;
+		}
+
+		// request new frame
+        requestAnimFrame(function() {
+          animate();
+        });
+	}
+
+	animate();
+
+</script>
+</body>
+</html>

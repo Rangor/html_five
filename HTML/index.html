@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Title of the document</title>
+</head>
+
+<body>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+</script>
+
+
+<a id="google_url" href="spotify:track:2DFRFqWNahKtFD112H2iEZ">Google</a>
+<input type="button" value="Start google" onClick="google_function()">
+</body>
+
+<script>
+	
+function google_function(){
+	$("#google_url").trigger("onClick");
+	alert($("#google_url").attr("href"));
+	window.location = ($("#google_url").attr("href"));
+}
+
+
+</script>
+
+
+
+</html>

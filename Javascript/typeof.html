@@ -1,0 +1,51 @@
+<script>
+	//Number
+	var number = 2;
+	console.log(typeof(number));//number
+	if(typeof(number) == "number"){
+		console.log("These was number");
+	}
+
+	var string = "String I am";
+	console.log(typeof(string));//string
+	if(typeof(string) == "string"){
+		console.log("These was string");
+	}
+
+	var array = [1,2,3,4];
+	console.log(typeof(array));//object
+	if(typeof(array) == "object"){
+		console.log("These was object");
+	}
+
+	var funVar = function(){
+		alert("Oh hai!");
+	}
+	console.log(typeof(funVar));//function
+	if(typeof(funVar) == "function"){
+		console.log("These was function");
+	}
+
+	var bool = false;
+	console.log(typeof(bool));//boolean
+	if(typeof(bool) == "boolean"){
+		console.log("These was boolean");
+	}
+
+
+	console.log(typeof(notFound));//undefined
+	if(typeof(notFound) == "undefined"){
+		console.log("These was undefined");
+	}
+
+	var notFound = null;
+	console.log(typeof(null));//undefined
+	if(typeof(notFound) == "undefined"){
+		console.log("These was undefined");
+	}
+
+	//NaN is a number
+	console.log(typeof(NaN));
+
+
+</script>

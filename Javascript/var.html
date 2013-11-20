@@ -1,0 +1,68 @@
+<script>
+
+	foo = "Martin";
+
+	function test(){
+		//foo = 2;
+		//var foo = 2;
+	}	
+
+	test();
+
+	console.log(foo);
+
+</script>
+
+<script type="text/javascript">
+	var $2$ = 2;
+	console.log($2$)
+
+	function Cat(){
+		this.mjau = function(){
+			console.log("Mjau");
+		}
+		this.scratch = function(){
+			console.log("Scratch the couch");
+		}
+	}
+
+	var m =  new Cat();
+	m.mjau();
+	m.scratch();
+
+	Cat.prototype.mjau = function(){
+		console.log("Im no cat");
+	}
+	Cat.prototype.test = function(){
+		console.log("Brand new function");
+	}
+
+	var m = new Cat();
+	m.mjau();
+	m.test();
+
+	var Dog = function(){
+		//this.mjau = function(){
+		//	console.log("Dogs bark not mjau");
+		//}
+	}
+
+
+	Dog.prototype = new Cat();
+	var d = new Dog();
+	d.mjau();//Mjau
+
+	Dog.prototype.mjau =function(){
+		console.log("Override!");
+	}
+
+	d.mjau();//Not mjau
+
+	var Mouse = {
+    	squeak: function(){
+    		console.log("Squeak!");
+    	}
+	}
+	Mouse.squeak();
+
+</script>
