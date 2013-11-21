@@ -9,7 +9,7 @@
 <script type="text/javascript">
     var canvasSizeX = 800;
     var canvasSizeY = 600;
-    var numberOfSquares = 10;
+    var numberOfSquares = 1;
     var canvas = document.getElementById("myCanvas");
     var context = canvas.getContext("2d");
     var gravityConstant = 5;
@@ -56,13 +56,15 @@
     var square = function(speed){
         this.posX = Math.random() * 300 + 1;
         this.posY = Math.random() * 100 + 1;
-        this.speedX = speed;
-        this.speedY = speed;
+        this.speedX = 20;
+        this.speedY = 0;
         this.boxWidth = 50;      
         this.boxHeight = 50;
         this.boxColor = randColor();
         this.accelerationX = 0.03;
         this.accelerationY = 0.1;
+        this.yMomentum = 0;
+        this.xMomentum = 0;
 
         this.draw = function(boxContext){
             boxContext.fillStyle = this.boxColor;
@@ -71,41 +73,57 @@
 
         this.reverseX = function(){
             if(this.speedX > 0){
-                this.speedX = -Math.random() * 10 + 1;;
+                this.speedX = -Math.random() * 10 + 1;
             }else{
-                this.speedX = Math.random() * 10 + 1;;
+                this.speedX = Math.random() * 10 + 1;
             }
         }
 
         this.reverseY = function(){
             if(this.speedY > 0){
-                this.speedY = -Math.random() * 10 + 1;;
+                this.speedY = -Math.random() * 10 + 1;
             }else{
-                this.speedY = Math.random() * 10 + 1;;
+                this.speedY = Math.random() * 10 + 1;
             }
         }
 
         this.move = function(){
             this.posX+=this.speedX;
-            this.posY+=this.speedY;
+
+            this.xMomentum++;
+            
             if(this.posX+this.boxWidth > canvasSizeX){
-                this.speedX = -Math.random() * 10 + 1;
-            }
-            if(this.posY+this.boxHeight > canvasSizeY){
-                this.speedY = -Math.random() * 10 + 1;
+                this.speedX = -this.speedX;
             }
 
             if(this.posX < 0){
-                this.speedX = Math.random() * 10 + 1;
+                this.speedX = Math.abs(this.speedX);
             }
+
+            //Y Axis Logic
+            this.posY+=this.speedY;
+
+            if(this.speedY > 0){
+                this.yMomentum += this.accelerationY;
+            }
+            
+            if(this.posY+this.boxHeight >= canvasSizeY){
+                if (this.yMomentum > 2) {
+                    this.yMomentum-=2;
+                }
+                this.speedY = - this.yMomentum;
+                this.yMomentum = 0;
+                this.posY = canvasSizeY-this.boxHeight;
+            }
+
             if(this.posY < 0){
-                this.speedY = Math.random() * 10 + 1;
+                this.yMomentum = 0;
+                this.speedY = 0;
             }
-            //Gravity
-            // if(this.posY+this.boxHeight + 10 < canvasSizeY){
-            //     this.posY+=gravityConstant; 
-            // }
-            // Y Axis Accelereation
+
+            
+
+
             this.speedY+=this.accelerationY;
             
             if(this.speedX > 0){
@@ -154,11 +172,11 @@
         var hit = false;
 
 
-        if((b2X1 > b1X1 && b2X1 < b1X2) && (b2Y1 > b1Y1 && b2Y1 < b1Y2)){
+        if((b2X1 >= b1X1 && b2X1 <= b1X2) && (b2Y1 >= b1Y1 && b2Y1 <= b1Y2)){
             hit = true;
         }
 
-        if((b2X2 > b1X1 && b2X1 < b1X2) && (b2Y1 > b1Y1 && b2Y1 < b1Y2)){
+        if((b2X2 >= b1X1 && b2X1 <= b1X2) && (b2Y1 >= b1Y1 && b2Y1 <= b1Y2)){
             hit = true;
         }
 
@@ -203,8 +221,8 @@
                    boxColisisonCheck(listOfSquares[i],listOfSquares[p]);     
                 }
             }
-            listOfSquares[i].draw(context);
             listOfSquares[i].move();
+            listOfSquares[i].draw(context);
         }
 
         // request new frame
