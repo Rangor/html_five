@@ -9,6 +9,7 @@
 <script type="text/javascript">
     var canvasSizeX = 1024;
     var canvasSizeY = 800;
+    var numberOfSquares = 100;
 
     var canvas = document.getElementById("myCanvas");
     var context = canvas.getContext("2d");
@@ -82,17 +83,17 @@
             if(this.posX < 0){
                 var rand = Math.random() * 10 + 1;
                 this.speedX = rand;
-                this.boxColor = randColor();
+                //this.boxColor = randColor();
             }
             if(this.posY < 0){
                 var rand = Math.random() * 10 + 1;
                 this.speedY = rand;
-                this.boxColor = randColor();
+                //this.boxColor = randColor();
             }
         }
     }
 
-    for(var i = 0; i < 2; i++){
+    for(var i = 0; i < numberOfSquares; i++){
         var rand = Math.random();
         var r = rand * 10 + 1;
         listOfSquares.push(new square(r));
@@ -123,7 +124,7 @@
             yHit = true;
         }
 
-        if(xHit && yHit){
+        if(false){
             console.log("Y and X hit!")
 
             box2.posX-=box2.speedX;
@@ -151,10 +152,10 @@
         //Clear
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        context.canvas.width  = window.innerWidth;
-        context.canvas.height = window.innerHeight;
-        canvasSizeX = window.innerWidth;
-        canvasSizeY = window.innerHeight;
+        context.canvas.width  = window.innerWidth - 4 ;
+        context.canvas.height = window.innerHeight - 4;
+        canvasSizeX = window.innerWidth - 4;
+        canvasSizeY = window.innerHeight - 4;
 
         //Draw
         for(var i = 0; i < listOfSquares.length; i++){
