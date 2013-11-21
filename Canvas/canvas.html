@@ -1,16 +1,15 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="my_css.css">
 </head>
 <body>
-<h1>This is my header, there are many like it, but this one is mine</h1>
-    <canvas id="myCanvas" width="1024" height="800"
-    style="border:1px solid #000000;">
+    <canvas id="myCanvas" width="800" height="600">
     </canvas>
 <script type="text/javascript">
-    var canvasSizeX = 1024;
-    var canvasSizeY = 800;
-
+    var canvasSizeX = 800;
+    var canvasSizeY = 600;
+    var numberOfSquares = 2;
     var canvas = document.getElementById("myCanvas");
     var context = canvas.getContext("2d");
 
@@ -23,6 +22,19 @@
         };
       })();
 
+
+    window.addEventListener('keydown', doKeyDown, true);
+    function doKeyDown(e) {
+        //alert( e.keyCode );
+        if(e.keyCode == 38){
+            var rand = Math.random();
+            var r = rand * 10 + 1;
+            listOfSquares.push(new square(r));
+        }
+        if(e.keyCode == 40){
+            listOfSquares.pop();
+        }
+    }
 
     function randColor(){
         var rand = Math.random() * 99 + 1;
@@ -83,49 +95,87 @@
             if(this.posX < 0){
                 var rand = Math.random() * 10 + 1;
                 this.speedX = rand;
-                this.boxColor = randColor();
+                //this.boxColor = randColor();
             }
             if(this.posY < 0){
                 var rand = Math.random() * 10 + 1;
                 this.speedY = rand;
-                this.boxColor = randColor();
+                //this.boxColor = randColor();
             }
         }
     }
 
-    for(var i = 0; i < 2; i++){
+    for(var i = 0; i < numberOfSquares; i++){
         var rand = Math.random();
         var r = rand * 10 + 1;
         listOfSquares.push(new square(r));
     }
 
     function boxColisisonCheck(box1, box2){
+        //Box 1 coordinates
+        //Left upper corner
         var b1X1 = box1.posX;
-        var b1X2 = box1.posX + box1.boxWidth;
         var b1Y1 = box1.posY;
-        var b1Y2 = box1.posY + box1.boxHeight;
+        // Right upper corner
+        var b1X2 = box1.posX + box1.boxWidth;
+        var b1Y2 = box1.posY + box1.boxWidth;
+        //Right bottom corner
+        var b1X3 = box1.posX + box1.boxWidth + box1.boxHeight;
+        var b1Y3 = box1.posY + box1.boxWidth + box1.boxHeight;
+        // Left bottomt corner
+        var b1X4 = box1.posX + box1.boxHeight;
+        var b1Y4 = box1.posY + box1.boxHeight;
 
+        //Box 2 coordinates
+        //Left upper corner
         var b2X1 = box2.posX;
-        var b2X2 = box2.posX + box2.boxWidth;
         var b2Y1 = box2.posY;
-        var b2Y2 = box2.posY + box2.boxHeight;
+        // Right upper corner
+        var b2X2 = box2.posX + box2.boxWidth;
+        var b2Y2 = box2.posY + box2.boxWidth;
+        //Right bottom corner
+        var b2X3 = box2.posX + box2.boxWidth + box2.boxHeight;
+        var b2Y3 = box2.posY + box2.boxWidth + box2.boxHeight;
+        // Left bottomt corner
+        var b2X4 = box2.posX + box2.boxHeight;
+        var b2Y4 = box2.posY + box2.boxHeight;
 
         //console.log("B1X1:" + Math.floor(b1X1) + " B1X2:" + Math.floor(b1X2) + " B2X1:" + Math.floor(b2X1)+ " B2X2: " + Math.floor(b2X2));
 
-        var xHit = false;
-        if(b2X1 > b1X1 && b2X1 < b1X2){
-            //console.log("B1X1:" + b1X1 + " B1X2:" + b1X2 + " B2X1:" + b2X1+ " B2X2: " + b2X2);
-            
-            xHit = true;
+        var hit = false;
+
+
+        if((b2X1 > b1X1 && b2X1 < b1X2) && (b2Y1 > b1Y1 && b2Y1 < b1Y2)){
+            hit = true;
         }
 
-        var yHit = false;
-        if(b2Y1 > b1Y1 && b2Y1 < b1Y2){
-            yHit = true;
+        if((b2X2 > b1X1 && b2X1 < b1X2) && (b2Y1 > b1Y1 && b2Y1 < b1Y2)){
+            hit = true;
         }
 
-        if(xHit && yHit){
-            console.log("Y and X hit!")
+        if((b2X1 > b1X1 && b2X1 < b1X2) && (b2Y1 > b1Y1 && b2Y1 < b1Y4)){
+
+        }
+
+        if((b2X1 > b1X1 && b2X1 < b1X2) && (b2Y1 > b1Y1 && b2Y1 < b1Y2)){
+            //hit = false;
+        }
+
+        if((b2X1 > b1X1 && b2X1 < b1X2) && (b2Y1 > b1Y4 && b2Y1 < b1Y4)){
+            //hit = false;
+        }
+
+        if((b2X3 > b1X4 && b2X3 < b1X2) && (b2Y3 > b1Y4 && b2Y3 < b1Y2)){
+            //hit = false;
+            //console.log("Upper right hit!");
+        }
+
+        if((b2X4 > b1X1 && b2X4 < b1X2) && (b2Y4 > b1Y1 && b2Y4 < b1Y2)){
+            //hit = false;
+            //console.log("Upper right hit!");
+        }
+
+        if(hit){
 
             box2.posX-=box2.speedX;
             box2.posY-=box2.speedY;
@@ -145,7 +195,15 @@
         return false;
     }
 
+
+
     function animate(){
+
+        //Resize
+        context.canvas.width  = window.innerWidth - 4 ;
+        context.canvas.height = window.innerHeight - 4;
+        canvasSizeX = window.innerWidth - 4;
+        canvasSizeY = window.innerHeight - 4;
 
         //Clear
         context.clearRect(0, 0, canvas.width, canvas.height);
