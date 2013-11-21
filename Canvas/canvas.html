@@ -66,17 +66,17 @@
 
         this.reverseX = function(){
             if(this.speedX > 0){
-                this.speedX = -1;
+                this.speedX = -2;
             }else{
-                this.speedX = 1;
+                this.speedX = 2;
             }
         }
 
         this.reverseY = function(){
             if(this.speedY > 0){
-                this.speedY = -1;
+                this.speedY = -2;
             }else{
-                this.speedY = 1;
+                this.speedY = 2;
             }
         }
 
@@ -84,23 +84,17 @@
             this.posX+=this.speedX;
             this.posY+=this.speedY;
             if(this.posX+this.boxWidth > canvasSizeX){
-                var rand = Math.random() * 10 + 1;
-                this.speedX = -rand;
+                this.speedX = -Math.random() * 10 + 1;
             }
             if(this.posY+this.boxHeight > canvasSizeY){
-                var rand = Math.random() * 10 + 1;
-                this.speedY = -rand;
+                this.speedY = -Math.random() * 10 + 1;
             }
 
             if(this.posX < 0){
-                var rand = Math.random() * 10 + 1;
-                this.speedX = rand;
-                //this.boxColor = randColor();
+                this.speedX = Math.random() * 10 + 1;
             }
             if(this.posY < 0){
-                var rand = Math.random() * 10 + 1;
-                this.speedY = rand;
-                //this.boxColor = randColor();
+                this.speedY = Math.random() * 10 + 1;
             }
         }
     }
@@ -153,28 +147,6 @@
             hit = true;
         }
 
-        if((b2X1 > b1X1 && b2X1 < b1X2) && (b2Y1 > b1Y1 && b2Y1 < b1Y4)){
-
-        }
-
-        if((b2X1 > b1X1 && b2X1 < b1X2) && (b2Y1 > b1Y1 && b2Y1 < b1Y2)){
-            //hit = false;
-        }
-
-        if((b2X1 > b1X1 && b2X1 < b1X2) && (b2Y1 > b1Y4 && b2Y1 < b1Y4)){
-            //hit = false;
-        }
-
-        if((b2X3 > b1X4 && b2X3 < b1X2) && (b2Y3 > b1Y4 && b2Y3 < b1Y2)){
-            //hit = false;
-            //console.log("Upper right hit!");
-        }
-
-        if((b2X4 > b1X1 && b2X4 < b1X2) && (b2Y4 > b1Y1 && b2Y4 < b1Y2)){
-            //hit = false;
-            //console.log("Upper right hit!");
-        }
-
         if(hit){
 
             box2.posX-=box2.speedX;
@@ -210,13 +182,13 @@
 
         //Draw
         for(var i = 0; i < listOfSquares.length; i++){
-            listOfSquares[i].draw(context);
-            listOfSquares[i].move();
             for(var p = 0; p < listOfSquares.length;p++){
                 if(p != i){
                    boxColisisonCheck(listOfSquares[i],listOfSquares[p]);     
                 }
             }
+            listOfSquares[i].draw(context);
+            listOfSquares[i].move();
         }
 
         // request new frame
