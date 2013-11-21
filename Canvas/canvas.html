@@ -9,7 +9,7 @@
 <script type="text/javascript">
     var canvasSizeX = 800;
     var canvasSizeY = 600;
-    var numberOfSquares = 2;
+    var numberOfSquares = 10;
     var canvas = document.getElementById("myCanvas");
     var context = canvas.getContext("2d");
 
@@ -55,8 +55,8 @@
         this.posY = Math.random() * 1000 + 1;
         this.speedX = speed;
         this.speedY = speed;
-        this.boxWidth = 100;      
-        this.boxHeight = 100;
+        this.boxWidth = 50;      
+        this.boxHeight = 50;
         this.boxColor = randColor();
 
         this.draw = function(boxContext){
@@ -66,17 +66,17 @@
 
         this.reverseX = function(){
             if(this.speedX > 0){
-                this.speedX = -2;
+                this.speedX = -Math.random() * 10 + 1;;
             }else{
-                this.speedX = 2;
+                this.speedX = Math.random() * 10 + 1;;
             }
         }
 
         this.reverseY = function(){
             if(this.speedY > 0){
-                this.speedY = -2;
+                this.speedY = -Math.random() * 10 + 1;;
             }else{
-                this.speedY = 2;
+                this.speedY = Math.random() * 10 + 1;;
             }
         }
 
