@@ -1,0 +1,180 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="my_css.css">
+</head>
+<body>
+    <canvas id="myCanvas">
+    </canvas>
+<script type="text/javascript">
+    var canvasSizeX = 1024;
+    var canvasSizeY = 800;
+
+    var canvas = document.getElementById("myCanvas");
+    var context = canvas.getContext("2d");
+
+    var listOfSquares =[];
+
+    window.requestAnimFrame = (function(callback) {
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+        function(callback) {
+          window.setTimeout(callback, 1000 / 60);
+        };
+      })();
+
+
+    function randColor(){
+        var rand = Math.random() * 99 + 1;
+        var Red = rand-rand%1;
+        rand = Math.random() * 99 + 1;
+        var Blue = rand-rand%1;
+        rand = Math.random() * 99 + 1;
+        var Green = rand-rand%1;
+        //console.log((Red+""+Green+""+Blue));
+
+        var trueColor = Red*10000+Blue*100+Green+"";
+        return trueColor;
+        //return(Red+""+Green+""+Blue);
+    }
+
+    var square = function(speed){
+        this.posX = Math.random() * 1000 + 1;
+        this.posY = Math.random() * 1000 + 1;
+        this.speedX = speed;
+        this.speedY = speed;
+        this.boxWidth = 100;      
+        this.boxHeight = 100;
+        this.boxColor = randColor();
+
+        this.draw = function(boxContext){
+            boxContext.fillStyle = this.boxColor;
+            boxContext.fillRect(this.posX,this.posY,this.boxWidth,this.boxHeight);
+        }
+
+        this.reverseX = function(){
+            if(this.speedX > 0){
+                this.speedX = -1;
+            }else{
+                this.speedX = 1;
+            }
+        }
+
+        this.reverseY = function(){
+            if(this.speedY > 0){
+                this.speedY = -1;
+            }else{
+                this.speedY = 1;
+            }
+        }
+
+        this.move = function(){
+            this.posX+=this.speedX;
+            this.posY+=this.speedY;
+            if(this.posX+this.boxWidth > canvasSizeX){
+                var rand = Math.random() * 10 + 1;
+                this.speedX = -rand;
+            }
+            if(this.posY+this.boxHeight > canvasSizeY){
+                var rand = Math.random() * 10 + 1;
+                this.speedY = -rand;
+            }
+
+            if(this.posX < 0){
+                var rand = Math.random() * 10 + 1;
+                this.speedX = rand;
+                this.boxColor = randColor();
+            }
+            if(this.posY < 0){
+                var rand = Math.random() * 10 + 1;
+                this.speedY = rand;
+                this.boxColor = randColor();
+            }
+        }
+    }
+
+    for(var i = 0; i < 2; i++){
+        var rand = Math.random();
+        var r = rand * 10 + 1;
+        listOfSquares.push(new square(r));
+    }
+
+    function boxColisisonCheck(box1, box2){
+        var b1X1 = box1.posX;
+        var b1X2 = box1.posX + box1.boxWidth;
+        var b1Y1 = box1.posY;
+        var b1Y2 = box1.posY + box1.boxHeight;
+
+        var b2X1 = box2.posX;
+        var b2X2 = box2.posX + box2.boxWidth;
+        var b2Y1 = box2.posY;
+        var b2Y2 = box2.posY + box2.boxHeight;
+
+        //console.log("B1X1:" + Math.floor(b1X1) + " B1X2:" + Math.floor(b1X2) + " B2X1:" + Math.floor(b2X1)+ " B2X2: " + Math.floor(b2X2));
+
+        var xHit = false;
+        if(b2X1 > b1X1 && b2X1 < b1X2){
+            //console.log("B1X1:" + b1X1 + " B1X2:" + b1X2 + " B2X1:" + b2X1+ " B2X2: " + b2X2);
+            
+            xHit = true;
+        }
+
+        var yHit = false;
+        if(b2Y1 > b1Y1 && b2Y1 < b1Y2){
+            yHit = true;
+        }
+
+        if(xHit && yHit){
+            console.log("Y and X hit!")
+
+            box2.posX-=box2.speedX;
+            box2.posY-=box2.speedY;
+
+            box2.reverseX();
+            box2.reverseY();
+
+            box1.posX-=box1.speedX;
+            box1.posY-=box1.speedY;
+
+            box1.reverseY();
+            box1.reverseX();
+
+
+        }
+
+        return false;
+    }
+
+    function animate(){
+
+ 
+
+        //Clear
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        context.canvas.width  = window.innerWidth;
+        context.canvas.height = window.innerHeight;
+        canvasSizeX = window.innerWidth;
+        canvasSizeY = window.innerHeight;
+
+        //Draw
+        for(var i = 0; i < listOfSquares.length; i++){
+            listOfSquares[i].draw(context);
+            listOfSquares[i].move();
+            for(var p = 0; p < listOfSquares.length;p++){
+                if(p != i){
+                   boxColisisonCheck(listOfSquares[i],listOfSquares[p]);     
+                }
+            }
+        }
+
+        // request new frame
+        requestAnimFrame(function() {
+          animate();
+        });
+    }
+
+    animate();
+
+</script>
+</body>
+</html>
