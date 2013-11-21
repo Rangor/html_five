@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="my_css.css">
+</head>
+<body>
+    <canvas id="myCanvas" width="800" height="600">
+    </canvas>
+<script type="text/javascript">
+    var canvasSizeX = 800;
+    var canvasSizeY = 600;
+    var numberOfSquares = 1;
+    var canvas = document.getElementById("myCanvas");
+    var context = canvas.getContext("2d");
+    var gravityConstant = 5;
+
+    var listOfSquares =[];
+
+    window.requestAnimFrame = (function(callback) {
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+        function(callback) {
+          window.setTimeout(callback, 1000 / 60);
+        };
+      })();
+
+
+    window.addEventListener('keydown', doKeyDown, true);
+    function doKeyDown(e) {
+        //alert( e.keyCode );
+        if(e.keyCode == 38){
+            var rand = Math.random();
+            var r = rand * 10 + 1;
+            listOfSquares.push(new square(r));
+        }
+        if(e.keyCode == 40){
+            listOfSquares.pop();
+        }
+    }
+
+    function randColor(){
+        var rand = Math.random() * 99 + 1;
+        var Red = rand-rand%1;
+        rand = Math.random() * 99 + 1;
+        var Blue = rand-rand%1;
+        rand = Math.random() * 99 + 1;
+        var Green = rand-rand%1;
+        //console.log((Red+""+Green+""+Blue));
+
+        var trueColor = Red*10000+Blue*100+Green+"";
+        return trueColor;
+        //return(Red+""+Green+""+Blue);
+    }
+
+    var square = function(speed){
+        this.posX = Math.random() * 300 + 1;
+        this.posY = Math.random() * 100 + 1;
+        this.speedX = speed;
+        this.speedY = speed;
+        this.boxWidth = 50;      
+        this.boxHeight = 50;
+        this.boxColor = randColor();
+        this.accelerationX = 0.05;
+        this.accelerationY = 0.1;
+
+        this.draw = function(boxContext){
+            boxContext.fillStyle = this.boxColor;
+            boxContext.fillRect(this.posX,this.posY,this.boxWidth,this.boxHeight);
+        }
+
+        this.reverseX = function(){
+            if(this.speedX > 0){
+                this.speedX = -Math.random() * 10 + 1;;
+            }else{
+                this.speedX = Math.random() * 10 + 1;;
+            }
+        }
+
+        this.reverseY = function(){
+            if(this.speedY > 0){
+                this.speedY = -Math.random() * 10 + 1;;
+            }else{
+                this.speedY = Math.random() * 10 + 1;;
+            }
+        }
+
+        this.move = function(){
+            this.posX+=this.speedX;
+            this.posY+=this.speedY;
+            if(this.posX+this.boxWidth > canvasSizeX){
+                this.speedX = -Math.random() * 10 + 1;
+            }
+            if(this.posY+this.boxHeight > canvasSizeY){
+                this.speedY = -Math.random() * 10 + 1;
+            }
+
+            if(this.posX < 0){
+                this.speedX = Math.random() * 10 + 1;
+            }
+            if(this.posY < 0){
+                this.speedY = Math.random() * 10 + 1;
+            }
+            //Gravity
+            // if(this.posY+this.boxHeight + 10 < canvasSizeY){
+            //     this.posY+=gravityConstant; 
+            // }
+            // Y Axis Accelereation
+            this.speedY+=this.accelerationY;
+            
+            if(this.speedX > 0){
+                this.speedX-=this.accelerationX;
+            }else{
+                this.speedX+=this.accelerationX;
+            }
+            
+            // if(this.speedY < 0){
+            //     this.speedY+=this.accelerationY;
+            // }
+        }
+    }
+
+    for(var i = 0; i < numberOfSquares; i++){
+        var rand = Math.random();
+        var r = rand * 10 + 1;
+        listOfSquares.push(new square(r));
+    }
+
+    function boxColisisonCheck(box1, box2){
+        //Box 1 coordinates
+        //Left upper corner
+        var b1X1 = box1.posX;
+        var b1Y1 = box1.posY;
+        // Right upper corner
+        var b1X2 = box1.posX + box1.boxWidth;
+        var b1Y2 = box1.posY + box1.boxWidth;
+        //Right bottom corner
+        var b1X3 = box1.posX + box1.boxWidth + box1.boxHeight;
+        var b1Y3 = box1.posY + box1.boxWidth + box1.boxHeight;
+        // Left bottomt corner
+        var b1X4 = box1.posX + box1.boxHeight;
+        var b1Y4 = box1.posY + box1.boxHeight;
+
+        //Box 2 coordinates
+        //Left upper corner
+        var b2X1 = box2.posX;
+        var b2Y1 = box2.posY;
+        // Right upper corner
+        var b2X2 = box2.posX + box2.boxWidth;
+        var b2Y2 = box2.posY + box2.boxWidth;
+        //Right bottom corner
+        var b2X3 = box2.posX + box2.boxWidth + box2.boxHeight;
+        var b2Y3 = box2.posY + box2.boxWidth + box2.boxHeight;
+        // Left bottomt corner
+        var b2X4 = box2.posX + box2.boxHeight;
+        var b2Y4 = box2.posY + box2.boxHeight;
+
+        //console.log("B1X1:" + Math.floor(b1X1) + " B1X2:" + Math.floor(b1X2) + " B2X1:" + Math.floor(b2X1)+ " B2X2: " + Math.floor(b2X2));
+
+        var hit = false;
+
+
+        if((b2X1 > b1X1 && b2X1 < b1X2) && (b2Y1 > b1Y1 && b2Y1 < b1Y2)){
+            hit = true;
+        }
+
+        if((b2X2 > b1X1 && b2X1 < b1X2) && (b2Y1 > b1Y1 && b2Y1 < b1Y2)){
+            hit = true;
+        }
+
+        if(hit){
+
+            box2.posX-=box2.speedX;
+            box2.posY-=box2.speedY;
+
+            box2.reverseX();
+            box2.reverseY();
+
+            box1.posX-=box1.speedX;
+            box1.posY-=box1.speedY;
+
+            box1.reverseY();
+            box1.reverseX();
+
+
+        }
+
+        return false;
+    }
+
+
+
+    function animate(){
+
+        //Resize
+        context.canvas.width  = window.innerWidth - 4 ;
+        context.canvas.height = window.innerHeight - 4;
+        canvasSizeX = window.innerWidth - 4;
+        canvasSizeY = window.innerHeight - 4;
+
+        //Clear
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        //Draw
+        for(var i = 0; i < listOfSquares.length; i++){
+            for(var p = 0; p < listOfSquares.length;p++){
+                if(p != i){
+                   boxColisisonCheck(listOfSquares[i],listOfSquares[p]);     
+                }
+            }
+            listOfSquares[i].draw(context);
+            listOfSquares[i].move();
+        }
+
+        // request new frame
+        requestAnimFrame(function() {
+          animate();
+        });
+    }
+
+    animate();
+
+</script>
+</body>
+</html>
