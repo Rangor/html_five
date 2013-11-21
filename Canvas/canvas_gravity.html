@@ -31,9 +31,11 @@
             var rand = Math.random();
             var r = rand * 10 + 1;
             listOfSquares.push(new square(r));
+            numberOfSquares++;
         }
         if(e.keyCode == 40){
             listOfSquares.pop();
+            numberOfSquares--;
         }
     }
 
