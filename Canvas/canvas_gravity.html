@@ -81,9 +81,9 @@
 
         this.reverseY = function(){
             if(this.speedY > 0){
-                this.speedY = -Math.random() * 10 + 1;
+                this.speedY = -Math.random() * 5 + 1;
             }else{
-                this.speedY = Math.random() * 10 + 1;
+                this.speedY = Math.random() * 5 + 1;
             }
         }
 
@@ -185,14 +185,18 @@
             box2.posX-=box2.speedX;
             box2.posY-=box2.speedY;
 
-            box2.reverseX();
-            box2.reverseY();
-
             box1.posX-=box1.speedX;
             box1.posY-=box1.speedY;
 
+            var box1SpeedX = box1.speedX;
+            box1.speedX = box2.speedX;
+            box2.speedX = box1SpeedX;
+
+            // box2.reverseX();
+            box2.reverseY();
+
             box1.reverseY();
-            box1.reverseX();
+            // box1.reverseX();
 
 
         }
