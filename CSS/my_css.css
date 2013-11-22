@@ -27,6 +27,20 @@ p{
 	padding-top: 10px;
 	border-top: solid;
 }
+post-title{
+	color: grey;
+}
+post-title a{
+	color: white;
+	text-decoration: none;
+}
+date { 
+	   display:block;
+	   float:right;
+	   margin-right:10px;
+	   color: white;
+}
+
 para{
 	padding-top: 5px;
 	display: block;
@@ -34,10 +48,4 @@ para{
 
 content{
 	display: block;
-}
-date{
-	font-size: 110%;
-}
-perma{
-	font-size: 110%;
 }
