@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="my_css.css">
+	<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300' rel='stylesheet' type='text/css'>
+	<script src="jquery-2.0.3.js"></script>
+</head>
+<body>
+<h1>In Writing</h1>
+<h5>by  Martin M. Syvertsen</h5>
+<nav><a href="#">Main</a> - <a href="#">About</a> - <a href="#">Archive</a> - <a href="https://twitter.com/Rangor">Twitter</a></nav>
+<div id="content">
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+			$.ajax({
+			  url: "https://rawgithub.com/Rangor/html_five/master/CSS/index.html",
+			  context: document.body
+			}).done(function(result) {
+			  $("#content").text(result);
+			});
+	});
+</script>
+</body>
+</html>

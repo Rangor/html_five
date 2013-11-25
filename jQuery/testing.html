@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script src="jquery-2.0.3.js"></script>
+</head>
+<body>
+	<h1>DOM Manipulation</h1>
+	<h3 id="header">Welcome to the wonderful world of jQuery!</h3>
+	<button id="hideButton">Hide the header</button>
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			$("#hideButton").click(function(){
+				hideFunction();
+			});
+
+			function hideFunction(){
+				if(!$("#header").is(":visible")){
+					$("#header").show();
+					$("#hideButton").text("Hide the header");	
+				}else{
+					$("#header").hide();
+					$("#hideButton").text("Show the header");		
+				}
+		
+			}
+		});
+	</script>
+
+	<h1>Ajax Testing</h1>
+
+	<button id="fetchTweets">Fetch tweets</button>
+
+	<p id="tweets">Should arrive here</p>
+
+	<script type="text/javascript">
+		$("#fetchTweets").click(function(){
+			$.ajax({
+			  url: "https://rawgithub.com/Rangor/html_five/master/CSS/index.html",
+			  context: document.body
+			}).done(function(result) {
+			  $("#tweets").text(result);
+			});
+		});
+	</script>
+
+	<h1>Serialization</h1>
+
+</body>
+</html>
