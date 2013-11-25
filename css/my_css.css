@@ -21,10 +21,7 @@ nav{
 	font-size: 120%;
 }
 p{
-	margin-left: auto;
-	margin-right: auto;
 	text-align: left;
-	width: 600px;
 	padding-top: 20px;
 	border-top: solid;
 }
@@ -58,5 +55,6 @@ content{
 	margin-left: auto;
 	margin-right: auto;
 	text-align: left;
-	width: 600px;
+	width: 100%;
+	max-width: 650px;
 }
