@@ -1,6 +1,6 @@
 body{
 	background-color:black;
-	font-family: helvetica;
+	font-family: Roboto Condensed;
 	color: grey;
 }
 /*font-family: 'Roboto Condensed', sans-serif;*/
@@ -28,6 +28,9 @@ p{
 	padding-top: 20px;
 	border-top: solid;
 }
+ul{
+	margin-left: auto;
+}
 para{
 	padding-top: 10px;
 	display: block;
@@ -49,4 +52,11 @@ date {
 
 content{
 	display: block;
+}
+
+#content{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
+	width: 600px;
 }
