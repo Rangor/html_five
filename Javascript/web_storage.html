@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Web Storage</title>
+</head>
+<body>
+	<h1>Got storage?</h1>
+	<input id="name" type="text" placeholder="Name"></input>
+	<button onClick="saveName()">Save</button>
+
+	<h2>Saved name</h2>
+	<div id="savedName"></div>
+	<script type="text/javascript">
+	    
+	    function saveName(){
+	    	var name = document.getElementById("name").value;
+	    	localStorage.setItem("name", name);
+	    	document.getElementById("savedName").innerHTML = name;
+	    }
+
+	    function getName(){
+	    	var name = localStorage.getItem("name");
+	    	return name;
+	    }
+
+	    function supports_html5_storage() {
+		  try {
+		    return 'localStorage' in window && window['localStorage'] !== null;
+		  } catch (e) {
+		    return false;
+		  }
+		}
+
+		document.getElementById("savedName").innerHTML = getName();
+
+		//if(supports_html5_storage()){
+		//	alert("Storage!");
+		//}
+
+	</script>
+</body>
+</html>
